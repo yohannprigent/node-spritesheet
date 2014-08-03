@@ -5,6 +5,10 @@ class Style
   constructor: ( options ) ->
     @selector = options.selector
     @pixelRatio = options.pixelRatio || 1
+    @hdpi = options.hdpi || "(min--moz-device-pixel-ratio: #{ @pixelRatio }),\n
+(-o-min-device-pixel-ratio: #{ @pixelRatio }/1),\n
+(-webkit-min-device-pixel-ratio: #{ @pixelRatio }),\n
+(min-device-pixel-ratio: #{ @pixelRatio })"
     
     @resolveImageSelector = options.resolveImageSelector if options.resolveImageSelector
 
@@ -26,7 +30,7 @@ class Style
     @pixelRatio = pixelRatio || 1
   
     styles = [
-      @css @selector, [
+      @css @selector + '()', [
         "  background: url( '#{ relativeImagePath }' ) no-repeat"
         "  background-size: #{ width / pixelRatio }px #{ height / pixelRatio }px"
       ]
@@ -53,13 +57,13 @@ class Style
         image.style = @cssStyle attr
         image.selector = @resolveImageSelector( image.name, image.path )
 
-        styles.push @css( [ @selector, image.selector ].join( '.' ), attr )
+        styles.push @css( @selector + '-' + image.selector + '()', attr )
     
     styles.push ""
     css = styles.join "\n"
     
     if pixelRatio > 1
-      css = @wrapMediaQuery( css )
+      css = @wrapMediaQuery( "    background: url( '#{ relativeImagePath }' ) no-repeat;\n    background-size: #{ width / pixelRatio }px #{ height / pixelRatio }px; \n" )
   
     return css
   
@@ -67,11 +71,8 @@ class Style
     @cssComment comment
     
   wrapMediaQuery: ( css ) ->
-    "@media (min--moz-device-pixel-ratio: #{ @pixelRatio }),\n
-(-o-min-device-pixel-ratio: #{ @pixelRatio }/1),\n
-(-webkit-min-device-pixel-ratio: #{ @pixelRatio }),\n
-(min-device-pixel-ratio: #{ @pixelRatio }) {\n
+    "@media #{ @hdpi } {\n
 #{ css }
-}\n"
+  }\n"
   
 module.exports = Style

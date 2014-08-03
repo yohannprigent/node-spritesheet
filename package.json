@@ -1,7 +1,7 @@
 {
-    "name": "node-spritesheet",
+    "name": "node-spritesheet-less-optimized",
     "description": "Sprite sheet generator for node.js",
-    "version": "0.5.0",
+    "version": "0.5.1",
     "author": {
         "name": "Yohann Prigent",
         "email": "prigent.yohann@gmail.com"

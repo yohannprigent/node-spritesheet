@@ -1,3 +1,5 @@
+Forked from https://github.com/richardbutler/node-spritesheet
+
 # node-spritesheet
 
 Node-spritesheet is a utility to create sprite sheets in node.js. Its original
