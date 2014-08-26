@@ -31,7 +31,8 @@ class Style
   
     styles = [
       @css @selector + '()', [
-        "  background: url( '#{ relativeImagePath }' ) no-repeat"
+        "  background-image: url( '#{ relativeImagePath }' )"
+        "  background-repeat: no-repeat"
         "  background-size: #{ width / pixelRatio }px #{ height / pixelRatio }px"
       ]
     ]
@@ -63,7 +64,7 @@ class Style
     css = styles.join "\n"
     
     if pixelRatio > 1
-      css = @wrapMediaQuery( "    background: url( '#{ relativeImagePath }' ) no-repeat;\n    background-size: #{ width / pixelRatio }px #{ height / pixelRatio }px; \n" )
+      css = @wrapMediaQuery( "    background-image: url( '#{ relativeImagePath }' ) \n" )
   
     return css
   
