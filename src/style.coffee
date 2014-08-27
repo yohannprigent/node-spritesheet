@@ -77,7 +77,7 @@ class Style
     css = styles.join "\n"
     
     if pixelRatio > 1
-      css = @wrapMediaQuery( "    background-image: url( '#{ relativeImagePath }' ) no-repeat;\n    background-size: #{ width / pixelRatio }px #{ height / pixelRatio }px; \n" )
+      css = @wrapMediaQuery( "    background-image: url( '#{ relativeImagePath }' );\n    background-size: #{ width / pixelRatio }px #{ height / pixelRatio }px; \n" )
   
     return css
   
