@@ -28,7 +28,7 @@ class Style
     { imagePath, relativeImagePath, images, pixelRatio, width, height } = options
     relativeImagePath = relativeImagePath.replace /(\\+)/g, "/"
     @pixelRatio = pixelRatio || 1
-  
+
     styles = [
       @css @selector + '()', [
         "  background-image: url( '#{ relativeImagePath }' )"
@@ -42,11 +42,19 @@ class Style
       for image in images
         positionX = ( -image.cssx / pixelRatio )
         if positionX != 0
+          positionXP = Math.abs(positionX)
           positionX = positionX+'px'
+        else
+          positionXP = 0
 
         positionY = ( -image.cssy / pixelRatio )
         if positionY != 0
+          positionYP = Math.abs(positionY)
           positionY = positionY+'px'
+        else
+          positionYP = 0
+
+        image.selector = @resolveImageSelector( image.name, image.path )
 
         attr = [
           "  width: #{ image.cssw / pixelRatio }px"
@@ -54,17 +62,22 @@ class Style
           "  background-position: #{positionX} #{positionY}"
         ]
 
+        attrPercent = [
+          "  width: #{ image.cssw / pixelRatio }px"
+          "  height: #{ image.cssh / pixelRatio }px"
+          "  background-position: ((#{ image.cssw / pixelRatio }/2+#{positionXP})/(#{width}))*100+0% ((#{ image.cssh / pixelRatio }/2+#{positionYP})/(#{height}))*100+0%"
+        ]
 
         image.style = @cssStyle attr
-        image.selector = @resolveImageSelector( image.name, image.path )
 
-        styles.push @css( @selector + '-' + image.selector + '()', attr )
+        styles.push @css( @selector + '-' + image.selector + '(@ratio:1) when (@ratio = 1)', attr )
+        styles.push @css( @selector + '-' + image.selector + '(@ratio:1) when (@ratio = 2)', attrPercent )
     
     styles.push ""
     css = styles.join "\n"
     
     if pixelRatio > 1
-      css = @wrapMediaQuery( "    background-image: url( '#{ relativeImagePath }' );\n background-size: #{ width / pixelRatio }px #{ height / pixelRatio }px;\n" )
+      css = @wrapMediaQuery( "    background-image: url( '#{ relativeImagePath }' ) no-repeat;\n    background-size: #{ width / pixelRatio }px #{ height / pixelRatio }px; \n" )
   
     return css
   
