@@ -42,17 +42,11 @@ class Style
       for image in images
         positionX = ( -image.cssx / pixelRatio )
         if positionX != 0
-          positionXP = Math.abs(positionX)
           positionX = positionX+'px'
-        else
-          positionXP = 0
 
         positionY = ( -image.cssy / pixelRatio )
         if positionY != 0
-          positionYP = Math.abs(positionY)
           positionY = positionY+'px'
-        else
-          positionYP = 0
 
         image.selector = @resolveImageSelector( image.name, image.path )
 
@@ -62,16 +56,9 @@ class Style
           "  background-position: #{positionX} #{positionY}"
         ]
 
-        attrPercent = [
-          "  width: #{ image.cssw / pixelRatio }px"
-          "  height: #{ image.cssh / pixelRatio }px"
-          "  background-position: ((#{ image.cssw / pixelRatio }/2+#{positionXP})/(#{width}))*100+0% ((#{ image.cssh / pixelRatio }/2+#{positionYP})/(#{height}))*100+0%"
-        ]
-
         image.style = @cssStyle attr
 
-        styles.push @css( @selector + '-' + image.selector + '(@ratio:1) when (@ratio = 1)', attr )
-        styles.push @css( @selector + '-' + image.selector + '(@ratio:1) when (@ratio = 2)', attrPercent )
+        styles.push @css( @selector + '-' + image.selector + '()', attr )
     
     styles.push ""
     css = styles.join "\n"
